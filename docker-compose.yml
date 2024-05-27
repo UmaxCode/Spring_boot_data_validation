@@ -1,0 +1,27 @@
+services:
+
+  postgres:
+    container_name: spring-boot-validation-app-postgres-DB
+    image: 'postgres:latest'
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: post_db
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+
+  springBootApp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spring-boot
+    container_name: spring-boot-validation-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
