@@ -33,10 +33,9 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JWTSecurityFilter jwtSecurityFilter;
     private final OAuth2LoginSuccessHandler authenticationSuccessHandler;
-    private final OAuth2LoginFailureHandler authenticationFailureHandler;
 
-    @Value("${frontend.url}")
-    private String frontendUrl;
+    @Value("${frontend.login.url}")
+    private String frontedLoginURL;
 
 
     @Bean
@@ -46,16 +45,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers("/api/v1/auth/**", "/login/oauth2/code/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
 
-                .oauth2Login(oauth -> {
-                    oauth.loginPage(frontendUrl);
-                    oauth.successHandler(authenticationSuccessHandler);
-                    oauth.failureHandler(authenticationFailureHandler);
-                })
+                .oauth2Login(oauth -> oauth
+                        .successHandler(authenticationSuccessHandler)
+                        .failureUrl(frontedLoginURL))
+
                 .exceptionHandling(exception -> {
 
                     ObjectMapper objectMapper = new ObjectMapper();
@@ -69,14 +67,11 @@ public class SecurityConfig {
                         response.getWriter().write(json);
                     });
                     exception.accessDeniedHandler((request, response, accessDeniedException) -> {
-
                         error.put("error", accessDeniedException.getMessage());
                         String json = objectMapper.writeValueAsString(error);
-
                         response.setStatus(403);
                         response.setContentType("application/json");
                         response.getWriter().write(json);
-
                     });
                 })
 

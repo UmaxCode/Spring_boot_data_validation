@@ -40,6 +40,14 @@ public class AuthUserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/welcome")
+    public ResponseEntity<?> welcome() {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body("Welcome!" );
+    }
+
+
     @ExceptionHandler(UserAuthException.class)
     public ResponseEntity<?> handleException(UserAuthException error) {
         return ResponseEntity.status(error.getStatus()).body(error.getMessage());

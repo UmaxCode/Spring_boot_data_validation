@@ -1,6 +1,7 @@
 package com.umaxcode.spring.boot.data.validation.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -26,5 +26,7 @@ public class RefreshToken {
     private Date expires;
 
     @OneToOne
-    private User owner;
+    @JsonBackReference
+    @JoinColumn(name = "user_id")
+    private User user;
 }
