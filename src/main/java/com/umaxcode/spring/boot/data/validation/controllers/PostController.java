@@ -4,6 +4,8 @@ import com.umaxcode.spring.boot.data.validation.dtos.requests.PostCreationUpdate
 import com.umaxcode.spring.boot.data.validation.dtos.responses.SuccessMessage;
 import com.umaxcode.spring.boot.data.validation.exceptions.custom.PostException;
 import com.umaxcode.spring.boot.data.validation.services.PostService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
