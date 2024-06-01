@@ -27,18 +27,18 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 termsOfService = "My Term Of Service"
 
         )
-//        ,
-//        servers = {
-//                @Server(
-//                        url = "http://localhost:8080/",
-//                        description = "Server For Dev"
-//                )
-//                ,
-//                @Server(
-//                        url = "http:prod",
-//                        description = "Server For Prod"
-//                )
-//        }
+        ,
+        servers = {
+                @Server(
+                        url = "http://localhost:8080/",
+                        description = "Server For Dev"
+                )
+                ,
+                @Server(
+                        url = "http:prod",
+                        description = "Server For Prod"
+                )
+        }
         ,
         security = {
                 @SecurityRequirement(

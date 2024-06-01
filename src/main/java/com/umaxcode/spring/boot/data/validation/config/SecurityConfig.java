@@ -1,6 +1,7 @@
 package com.umaxcode.spring.boot.data.validation.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umaxcode.spring.boot.data.validation.enums.Role;
 import com.umaxcode.spring.boot.data.validation.filters.JWTSecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,10 +25,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.umaxcode.spring.boot.data.validation.enums.Permission.*;
+import static com.umaxcode.spring.boot.data.validation.enums.Role.ADMIN;
+import static org.springframework.http.HttpMethod.*;
+
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
@@ -47,6 +54,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers("/api/v1/auth/**", "/login/oauth2/code/**", "swagger-ui.html", "swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
+//                        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), Role.MANAGER.name())
+//                        .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.getPermission(), MANAGER_READ.getPermission())
+//                        .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.getPermission(), MANAGER_CREATE.getPermission())
+//                        .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.getPermission(), MANAGER_UPDATE.getPermission())
+//                        .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.getPermission(), MANAGER_DELETE.getPermission())
+////
+//                        .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
+//                        .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.getPermission())
+//                        .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.getPermission())
+//                        .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.getPermission())
+//                        .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.getPermission())
+
                         .anyRequest()
                         .authenticated())
 
@@ -67,7 +86,7 @@ public class SecurityConfig {
                         response.getWriter().write(json);
                     });
                     exception.accessDeniedHandler((request, response, accessDeniedException) -> {
-                        error.put("error", accessDeniedException.getMessage());
+                        error.put("error", accessDeniedException.getMessage() + ": Can't perform this operation");
                         String json = objectMapper.writeValueAsString(error);
                         response.setStatus(403);
                         response.setContentType("application/json");

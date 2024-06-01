@@ -7,6 +7,7 @@ import com.umaxcode.spring.boot.data.validation.dtos.requests.UserCreationDTO;
 import com.umaxcode.spring.boot.data.validation.exceptions.custom.UserAuthException;
 import com.umaxcode.spring.boot.data.validation.services.RefreshTokenService;
 import com.umaxcode.spring.boot.data.validation.services.UserAuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "User Authentication")
 public class AuthUserController {
 
     private final UserAuthService userAuthService;

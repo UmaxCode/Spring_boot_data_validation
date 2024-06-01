@@ -4,8 +4,11 @@ import com.umaxcode.spring.boot.data.validation.dtos.requests.PostCreationUpdate
 import com.umaxcode.spring.boot.data.validation.dtos.responses.SuccessMessage;
 import com.umaxcode.spring.boot.data.validation.exceptions.custom.PostException;
 import com.umaxcode.spring.boot.data.validation.services.PostService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
+@Tag(name = "User Post",
+description = "Post controller for allowing users to post data")
 public class PostController {
 
     private final PostService postService;
