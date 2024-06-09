@@ -3,6 +3,7 @@ package com.umaxcode.spring.boot.data.validation.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.umaxcode.spring.boot.data.validation.enums.Role;
+import com.umaxcode.spring.boot.data.validation.eventListeners.CrudEventListener;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Map;
 @Data
 @Entity
 @Table(name = "_user")
+@EntityListeners(CrudEventListener.class)
 public class User {
 
     @Id
