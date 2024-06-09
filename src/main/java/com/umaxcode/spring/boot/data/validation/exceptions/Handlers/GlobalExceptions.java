@@ -31,12 +31,19 @@ public class GlobalExceptions {
     }
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
-    public ResponseEntity<?> DataBaseExceptionHandler(){
+    public ResponseEntity<?> DataBaseExceptionHandler(DataIntegrityViolationException ex){
         Map<String, String> response = new HashMap<>();
+
         response.put("error", "username or email already exists");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<?> exceptionHandler(Exception ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 
 
     @ExceptionHandler(value = {BadCredentialsException.class, AccessDeniedException.class, SignatureException.class, ExpiredJwtException.class, HttpRequestMethodNotSupportedException.class})
